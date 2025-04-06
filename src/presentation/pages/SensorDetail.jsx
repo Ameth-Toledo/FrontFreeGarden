@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
     Box,
@@ -27,49 +27,22 @@ import {
     useColorModeValue,
 } from '@chakra-ui/react';
 import { FiArrowLeft, FiDroplet, FiThermometer, FiActivity, FiSettings } from 'react-icons/fi';
+import { useAuth } from '../contexts/AuthContext';
 
 // Datos simulados de sensores
 const sensorData = {
-    '1': {
-        id: '1',
-        name: 'Sensor Principal',
-        type: 'Humedad y Temperatura',
-        location: 'Jardín frontal',
-        humidity: 65,
-        temperature: 24,
-        battery: 85,
-        lastReading: '2025-03-12T10:30:00',
-        status: 'active',
-        readings: [
-            { timestamp: '2025-03-12T10:30:00', humidity: 65, temperature: 24 },
-            { timestamp: '2025-03-12T09:30:00', humidity: 64, temperature: 23 },
-            { timestamp: '2025-03-12T08:30:00', humidity: 62, temperature: 22 },
-            { timestamp: '2025-03-12T07:30:00', humidity: 63, temperature: 21 },
-            { timestamp: '2025-03-12T06:30:00', humidity: 67, temperature: 20 },
-        ]
-    },
-    '2': {
-        id: '2',
-        name: 'Sensor Secundario',
-        type: 'Humedad',
-        location: 'Jardín trasero',
-        humidity: 58,
-        temperature: null,
-        battery: 72,
-        lastReading: '2025-03-12T10:15:00',
-        status: 'active',
-        readings: [
-            { timestamp: '2025-03-12T10:15:00', humidity: 58, temperature: null },
-            { timestamp: '2025-03-12T09:15:00', humidity: 56, temperature: null },
-            { timestamp: '2025-03-12T08:15:00', humidity: 55, temperature: null },
-            { timestamp: '2025-03-12T07:15:00', humidity: 57, temperature: null },
-            { timestamp: '2025-03-12T06:15:00', humidity: 59, temperature: null },
-        ]
-    }
+    id: response.data.id,  
+    name: response.data.name,
+    email: response.data.email,
+    token: response.data.token
 };
 
+localStorage.setItem('freeGardenUser', JSON.stringify(userData));
+setUser(userData);
+
 const SensorDetail = () => {
-    const { id } = useParams();
+    const { user } = useAuth();
+    const { id: sensorId } = useParams();
     const navigate = useNavigate();
     const [sensor, setSensor] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -89,7 +62,7 @@ const SensorDetail = () => {
         setLoading(true);
 
         setTimeout(() => {
-            const sensorInfo = sensorData[id];
+            const sensorInfo = sensorData[sensorId];
             if (sensorInfo) {
                 setSensor(sensorInfo);
                 setError(null);
@@ -98,7 +71,7 @@ const SensorDetail = () => {
             }
             setLoading(false);
         }, 500);
-    }, [id]);
+    }, [sensorId]);
 
     // Obtener el color según el valor de humedad
     const getHumidityColor = (value) => {
@@ -127,15 +100,15 @@ const SensorDetail = () => {
     if (error) {
         return (
             <Box p={4}>
-                <Button leftIcon={<FiArrowLeft />} onClick={() => navigate('/dashboard')} mb={4}>
-                    Volver
-                </Button>
-                <Card bg={bgColor} borderColor={borderColor}>
-                    <CardBody>
-                        <Text>{error}</Text>
-                    </CardBody>
-                </Card>
-            </Box>
+            <Text>Usuario Logueado ID: {user?.id}</Text> 
+            <Card bg={bgColor} borderColor={borderColor}>
+                <CardBody>
+                    <Text>Nombre del Sensor: {sensor?.name}</Text>
+                    <Text>Ubicación: {sensor?.location}</Text>
+                    <Text>Última lectura: {formatDate(sensor?.lastReading)}</Text>
+                </CardBody>
+            </Card>
+        </Box>
         );
     }
 

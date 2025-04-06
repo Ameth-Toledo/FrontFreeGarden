@@ -43,11 +43,12 @@ import { useAuth } from '../contexts/AuthContext';
 
 const UserProfile = () => {
     const { user } = useAuth();
+    console.log(user);
     const toast = useToast();
     const [formData, setFormData] = useState({
         name: user?.name || '',
         email: user?.email || '',
-        activationCode: '',
+        phone: '',
         currentPassword: '',
         newPassword: '',
         confirmPassword: '',

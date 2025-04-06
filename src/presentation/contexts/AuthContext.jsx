@@ -40,10 +40,13 @@ export const AuthProvider = ({ children }) => {
             });
     
             const userData = response.data;
-
+    
             console.log("Datos recibidos del login:", userData);
     
-            // Guarda los datos del usuario (puede incluir token)
+            if (!userData.email) {
+                throw new Error('El correo electrónico no está presente en los datos del usuario');
+            }
+    
             localStorage.setItem('freeGardenUser', JSON.stringify(userData));
             setUser(userData);
     
@@ -58,7 +61,7 @@ export const AuthProvider = ({ children }) => {
                 message
             };
         }
-    };
+    };    
 
     // Función para registrar un nuevo usuario
     const register = async (userData) => {

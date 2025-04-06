@@ -35,6 +35,7 @@ const Register = () => {
         password: '',
         confirmPassword: '',
         age: '',
+        esp32Serial: '',
     });
 
     const [showPassword, setShowPassword] = useState(false);
@@ -97,6 +98,10 @@ const Register = () => {
             errors.age = 'Debes tener al menos 13 años';
         }
 
+        if (!formData.esp32Serial) {
+            errors.esp32Serial = 'El número de serie ESP32 es requerido';
+        }  
+
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -118,8 +123,8 @@ const Register = () => {
                 email: formData.email,
                 password: formData.password,
                 backupEmail: formData.backupEmail,
-                esp32Serial: '', 
-                age: parseInt(formData.age, 10) 
+                esp32Serial: formData.esp32Serial, 
+                age: parseInt(formData.age) 
             };
 
             // Llamar a la función register

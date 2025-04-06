@@ -40,6 +40,8 @@ export const AuthProvider = ({ children }) => {
             });
     
             const userData = response.data;
+
+            console.log("Datos recibidos del login:", userData);
     
             // Guarda los datos del usuario (puede incluir token)
             localStorage.setItem('freeGardenUser', JSON.stringify(userData));
@@ -66,11 +68,11 @@ export const AuthProvider = ({ children }) => {
                 lastName: userData.lastName,
                 password: userData.password,
                 email: userData.email,
-                age: userData.age, // ← Aquí solo asegúrate que esto sea un número
+                age: userData.age,
                 backupEmail: userData.backupEmail,
                 esp32Serial: userData.esp32Serial
             });
-    
+   
             return {
                 success: true,
                 message: 'Usuario registrado correctamente',
@@ -78,7 +80,8 @@ export const AuthProvider = ({ children }) => {
             };
         } catch (error) {
             console.error('Register error:', error);
-    
+            console.error('Error response data:', error.response?.data); 
+            
             const message = error.response?.data?.message || 'Error al registrar usuario';
     
             return {
@@ -86,7 +89,7 @@ export const AuthProvider = ({ children }) => {
                 message
             };
         }
-    };
+    };   
 
     // Función para cerrar sesión
     const logout = () => {

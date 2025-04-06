@@ -47,7 +47,7 @@ const UserProfile = () => {
     const [formData, setFormData] = useState({
         name: user?.name || '',
         email: user?.email || '',
-        phone: '',
+        activationCode: '',
         currentPassword: '',
         newPassword: '',
         confirmPassword: '',
@@ -134,15 +134,15 @@ const UserProfile = () => {
                         </FormControl>
 
                         <FormControl>
-                            <FormLabel>Teléfono</FormLabel>
+                            <FormLabel>Código de Activación</FormLabel>
                             <Input
-                                id="phone"
-                                value={formData.phone}
+                                id="activationCode"
+                                value={formData.activationCode}
                                 onChange={handleChange}
-                                placeholder="Tu número de teléfono"
+                                placeholder="Código de Activación"
                             />
                             <FormHelperText>
-                                Se usará para enviar notificaciones y alertas
+                                Necesario para activar todas las funcionalidades del sistema
                             </FormHelperText>
                         </FormControl>
 
@@ -326,7 +326,7 @@ const NotificationSettings = () => {
             </CardBody>
         </Card>
     );
-};
+}; 
 
 const SystemSettings = () => {
     const toast = useToast();
@@ -488,77 +488,7 @@ const SystemSettings = () => {
                 </CardBody>
             </Card>
 
-            <Card>
-                <CardBody>
-                    <Heading as="h3" size="md" mb={4}>
-                        Programación Horaria
-                    </Heading>
 
-                    <Stack spacing={4}>
-                        <FormControl>
-                            <FormLabel>Horario de riego preferido</FormLabel>
-                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-                                <Box>
-                                    <Text fontSize="sm" mb={2}>Mañana</Text>
-                                    <HStack>
-                                        <Select defaultValue="6">
-                                            {Array.from(Array(12).keys()).map(hour => (
-                                                <option key={hour} value={hour + 1}>{hour + 1}</option>
-                                            ))}
-                                        </Select>
-                                        <Select defaultValue="00">
-                                            {['00', '15', '30', '45'].map(minute => (
-                                                <option key={minute} value={minute}>{minute}</option>
-                                            ))}
-                                        </Select>
-                                        <Select defaultValue="am">
-                                            <option value="am">AM</option>
-                                            <option value="pm">PM</option>
-                                        </Select>
-                                    </HStack>
-                                </Box>
-
-                                <Box>
-                                    <Text fontSize="sm" mb={2}>Tarde</Text>
-                                    <HStack>
-                                        <Select defaultValue="7">
-                                            {Array.from(Array(12).keys()).map(hour => (
-                                                <option key={hour} value={hour + 1}>{hour + 1}</option>
-                                            ))}
-                                        </Select>
-                                        <Select defaultValue="30">
-                                            {['00', '15', '30', '45'].map(minute => (
-                                                <option key={minute} value={minute}>{minute}</option>
-                                            ))}
-                                        </Select>
-                                        <Select defaultValue="pm">
-                                            <option value="am">AM</option>
-                                            <option value="pm">PM</option>
-                                        </Select>
-                                    </HStack>
-                                </Box>
-                            </SimpleGrid>
-                            <FormHelperText>
-                                El sistema priorizará estos horarios para el riego programado
-                            </FormHelperText>
-                        </FormControl>
-
-                        <FormControl>
-                            <FormLabel>Días de riego</FormLabel>
-                            <SimpleGrid columns={{ base: 2, md: 4 }} spacing={2}>
-                                {['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'].map((day, idx) => (
-                                    <FormControl key={day} display="flex" alignItems="center">
-                                        <FormLabel htmlFor={`day-${idx}`} mb="0" fontSize="sm">
-                                            {day}
-                                        </FormLabel>
-                                        <Switch id={`day-${idx}`} colorScheme="brand" defaultChecked={idx < 5} />
-                                    </FormControl>
-                                ))}
-                            </SimpleGrid>
-                        </FormControl>
-                    </Stack>
-                </CardBody>
-            </Card>
 
             <Button colorScheme="brand" size="lg" onClick={handleSave}>
                 Guardar configuración del sistema

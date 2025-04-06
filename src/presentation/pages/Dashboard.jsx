@@ -15,8 +15,6 @@ import {
     Progress,
     HStack,
     Button,
-    Avatar,
-    Badge,
     useColorModeValue,
 } from '@chakra-ui/react';
 import {
@@ -134,53 +132,10 @@ const Dashboard = () => {
 
             {/* Contenido principal */}
             <Grid templateColumns={{ base: "1fr", lg: "2fr 1fr" }} gap={6}>
-                {/* Panel izquierdo */}
+                {/* Panel izquierdo - Ahora con Historial de riego */}
                 <Box>
-                    {/* Estado del riego */}
-                    <Card mb={6} bg={cardBg} borderColor={borderColor}>
-                        <CardBody>
-                            <Flex justify="space-between" align="center" mb={4}>
-                                <Heading as="h3" size="md">
-                                    Estado del riego
-                                </Heading>
-                                <Button
-                                    colorScheme={isIrrigationActive ? "red" : "brand"}
-                                    leftIcon={<Icon as={FiPower} />}
-                                    onClick={toggleIrrigation}
-                                >
-                                    {isIrrigationActive ? "Detener" : "Activar"}
-                                </Button>
-                            </Flex>
-
-                            <Text mb={4}>
-                                {isIrrigationActive
-                                    ? "El sistema de riego está activo. El agua está fluyendo hacia tus plantas."
-                                    : "El sistema de riego está en espera. Se activará automáticamente cuando la humedad sea baja."}
-                            </Text>
-
-                            <Box mb={4}>
-                                <Text fontWeight="medium" mb={1}>Estado general del sistema</Text>
-                                <Progress value={90} size="sm" colorScheme="green" borderRadius="full" />
-                                <Flex justify="flex-end">
-                                    <Text fontSize="sm" color="text.secondary" mt={1}>90% operativo</Text>
-                                </Flex>
-                            </Box>
-
-                            <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
-                                <HStack spacing={2} p={3} bg="green.50" borderRadius="md" color="green.800">
-                                    <Icon as={FiDroplet} />
-                                    <Text>Bomba funcionando correctamente</Text>
-                                </HStack>
-                                <HStack spacing={2} p={3} bg="blue.50" borderRadius="md" color="blue.800">
-                                    <Icon as={FiWifi} />
-                                    <Text>Sensores conectados</Text>
-                                </HStack>
-                            </SimpleGrid>
-                        </CardBody>
-                    </Card>
-
-                    {/* Historial de riegos */}
-                    <Card bg={cardBg} borderColor={borderColor}>
+                    {/* Historial de riegos - Ahora ubicado donde antes estaba el Estado del riego */}
+                    <Card bg={cardBg} borderColor={borderColor} h="100%">
                         <CardBody>
                             <Heading as="h3" size="md" mb={4}>
                                 Historial de riego
@@ -227,10 +182,35 @@ const Dashboard = () => {
                     </Card>
                 </Box>
 
-                {/* Panel derecho */}
+                {/* Panel derecho - Con Estado de riego (más pequeño) y Alertas debajo */}
                 <Box>
-                    {/* Alertas */}
+                    {/* Estado del riego - Ahora más pequeño y a la derecha */}
                     <Card mb={6} bg={cardBg} borderColor={borderColor}>
+                        <CardBody py={4} px={4}>
+                            <Flex justify="space-between" align="center" mb={2}>
+                                <Heading as="h3" size="md">
+                                    Estado del riego
+                                </Heading>
+                                <Button
+                                    size="sm"
+                                    colorScheme={isIrrigationActive ? "red" : "brand"}
+                                    leftIcon={<Icon as={FiPower} />}
+                                    onClick={toggleIrrigation}
+                                >
+                                    {isIrrigationActive ? "Detener" : "Activar"}
+                                </Button>
+                            </Flex>
+
+                            <Text fontSize="sm">
+                                {isIrrigationActive
+                                    ? "El sistema de riego está activo. El agua está fluyendo hacia tus plantas."
+                                    : "El sistema de riego está en espera. Se activará automáticamente cuando la humedad sea baja."}
+                            </Text>
+                        </CardBody>
+                    </Card>
+
+                    {/* Alertas - Ahora debajo del Estado de riego */}
+                    <Card bg={cardBg} borderColor={borderColor}>
                         <CardBody>
                             <Heading as="h3" size="md" mb={4}>
                                 Alertas
@@ -261,68 +241,6 @@ const Dashboard = () => {
                                     <Icon as={FiDroplet} />
                                     <Text>El nivel de agua en el depósito está por encima del 80%.</Text>
                                 </HStack>
-                            </Box>
-                        </CardBody>
-                    </Card>
-
-                    {/* Plantas destacadas - usando Avatar con iniciales en lugar de imágenes */}
-                    <Card bg={cardBg} borderColor={borderColor}>
-                        <CardBody>
-                            <Heading as="h3" size="md" mb={4}>
-                                Plantas Destacadas
-                            </Heading>
-
-                            <Box>
-                                {[
-                                    { name: "Orquídea", health: "A+", location: "Sala de estar" },
-                                    { name: "Ficus", health: "A", location: "Dormitorio" },
-                                    { name: "Jazmín", health: "A", location: "Jardín frontal" },
-                                ].map((plant, idx) => (
-                                    <Flex key={idx} align="center" py={2} borderBottom={idx < 2 ? "1px solid" : "none"} borderColor={borderColor}>
-                                        <Flex
-                                            align="center"
-                                            justify="center"
-                                            bg={`${
-                                                plant.health === "A+"
-                                                    ? "green.500"
-                                                    : plant.health === "A"
-                                                        ? "brand.500"
-                                                        : "orange.500"
-                                            }30`}
-                                            color={
-                                                plant.health === "A+"
-                                                    ? "green.500"
-                                                    : plant.health === "A"
-                                                        ? "brand.500"
-                                                        : "orange.500"
-                                            }
-                                            borderRadius="full"
-                                            p={2}
-                                            boxSize="40px"
-                                            mr={3}
-                                            fontWeight="bold"
-                                        >
-                                            {plant.name.charAt(0)}
-                                        </Flex>
-                                        <Box flex="1">
-                                            <Text fontWeight="medium">{plant.name}</Text>
-                                            <Text fontSize="sm" color="text.secondary">
-                                                {plant.location}
-                                            </Text>
-                                        </Box>
-                                        <Badge
-                                            px={3}
-                                            py={1}
-                                            colorScheme={
-                                                plant.health === "A+" ? "green" : plant.health === "A" ? "blue" : "orange"
-                                            }
-                                            fontSize="sm"
-                                            borderRadius="full"
-                                        >
-                                            {plant.health}
-                                        </Badge>
-                                    </Flex>
-                                ))}
                             </Box>
                         </CardBody>
                     </Card>

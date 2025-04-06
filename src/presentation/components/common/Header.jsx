@@ -64,14 +64,6 @@ const Header = ({ onMenuOpen }) => {
 
             {/* Right section - User menu */}
             <HStack spacing={4}>
-                <Tooltip label="Modo oscuro/claro">
-                    <IconButton
-                        aria-label="Cambiar tema"
-                        icon={colorMode === 'light' ? <FiMoon /> : <FiSun />}
-                        variant="ghost"
-                        onClick={toggleColorMode}
-                    />
-                </Tooltip>
 
                 <Tooltip label="Notificaciones">
                     <Box position="relative">

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const AuthContext = createContext(null);
 
@@ -33,32 +34,26 @@ export const AuthProvider = ({ children }) => {
     // Función para iniciar sesión
     const login = async (email, password) => {
         try {
-            // Simulación de login para desarrollo
-            // En producción, esto haría una petición a una API
-            if (email === 'admin@freegarden.com' && password === 'admin123') {
-                const userData = {
-                    id: '1',
-                    name: 'Administrador',
-                    email: email,
-                    role: 'admin',
-                };
-
-                // Guardar en localStorage
-                localStorage.setItem('freeGardenUser', JSON.stringify(userData));
-                setUser(userData);
-
-                return { success: true };
-            }
-
-            return {
-                success: false,
-                message: 'Credenciales incorrectas. Intenta con admin@freegarden.com / admin123'
-            };
+            const response = await axios.post('http://localhost:8080/login', {
+                email,
+                password
+            });
+    
+            const userData = response.data;
+    
+            // Guarda los datos del usuario (puede incluir token)
+            localStorage.setItem('freeGardenUser', JSON.stringify(userData));
+            setUser(userData);
+    
+            return { success: true };
         } catch (error) {
             console.error('Login error:', error);
+    
+            const message = error.response?.data?.message || 'Error al iniciar sesión';
+    
             return {
                 success: false,
-                message: error.message || 'Error al iniciar sesión'
+                message
             };
         }
     };
@@ -66,18 +61,29 @@ export const AuthProvider = ({ children }) => {
     // Función para registrar un nuevo usuario
     const register = async (userData) => {
         try {
-            // Simulación de registro para desarrollo
-            console.log('Usuario registrado:', userData);
-
+            const response = await axios.post('http://localhost:8080/clients', {
+                name: userData.name,
+                lastName: userData.lastName,
+                password: userData.password,
+                email: userData.email,
+                age: userData.age, // ← Aquí solo asegúrate que esto sea un número
+                backupEmail: userData.backupEmail,
+                esp32Serial: userData.esp32Serial
+            });
+    
             return {
                 success: true,
-                message: 'Usuario registrado correctamente'
+                message: 'Usuario registrado correctamente',
+                data: response.data
             };
         } catch (error) {
             console.error('Register error:', error);
+    
+            const message = error.response?.data?.message || 'Error al registrar usuario';
+    
             return {
                 success: false,
-                message: error.message || 'Error al registrar usuario'
+                message
             };
         }
     };

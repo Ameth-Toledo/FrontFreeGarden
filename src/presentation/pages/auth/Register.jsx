@@ -31,8 +31,10 @@ const Register = () => {
         nombre: '',
         apellido: '',
         email: '',
+        backupEmail: '',
         password: '',
         confirmPassword: '',
+        age: '',
     });
 
     const [showPassword, setShowPassword] = useState(false);
@@ -71,6 +73,12 @@ const Register = () => {
             errors.email = 'El correo electrónico no es válido';
         }
 
+        if (!formData.backupEmail) {
+            errors.backupEmail = 'El correo de recuperación es requerido';
+        } else if (!/\S+@\S+\.\S+/.test(formData.backupEmail)) {
+            errors.backupEmail = 'El correo de recuperación no es válido';
+        }
+
         if (!formData.password) {
             errors.password = 'La contraseña es requerida';
         } else if (formData.password.length < 6) {
@@ -81,6 +89,12 @@ const Register = () => {
             errors.confirmPassword = 'Confirma tu contraseña';
         } else if (formData.password !== formData.confirmPassword) {
             errors.confirmPassword = 'Las contraseñas no coinciden';
+        }
+
+        if (!formData.age) {
+            errors.age = 'La edad es requerida';
+        } else if (isNaN(formData.age) || parseInt(formData.age) < 13) {
+            errors.age = 'Debes tener al menos 13 años';
         }
 
         setFormErrors(errors);
@@ -99,10 +113,13 @@ const Register = () => {
         try {
             // Preparar los datos para el registro
             const userData = {
-                nombre: formData.nombre,
-                apellido: formData.apellido,
+                name: formData.nombre,
+                lastName: formData.apellido,
                 email: formData.email,
                 password: formData.password,
+                backupEmail: formData.backupEmail,
+                esp32Serial: '', 
+                age: parseInt(formData.age, 10) 
             };
 
             // Llamar a la función register
@@ -299,6 +316,33 @@ const Register = () => {
                             <FormErrorMessage>{formErrors.email}</FormErrorMessage>
                         </FormControl>
 
+                        <FormControl isInvalid={!!formErrors.backupEmail}>
+                            <Input
+                                id="backupEmail"
+                                type="email"
+                                value={formData.backupEmail}
+                                onChange={handleChange}
+                                placeholder="Correo electrónico de recuperacion"
+                                variant="unstyled"
+                                p={4}
+                                bg="rgba(255, 255, 255, 0.05)"
+                                border="none"
+                                borderBottom="2px solid"
+                                borderColor="rgba(255, 255, 255, 0.2)"
+                                borderRadius="4px 4px 0 0"
+                                color="white"
+                                _placeholder={{ color: 'gray.500' }}
+                                _hover={{ borderColor: "rgba(76, 175, 80, 0.5)" }}
+                                _focus={{
+                                    borderColor: "#4CAF50",
+                                    bg: "rgba(255, 255, 255, 0.07)"
+                                }}
+                                fontSize="md"
+                                h="56px"
+                            />
+                            <FormErrorMessage>{formErrors.backupEmail}</FormErrorMessage>
+                        </FormControl>
+
                         <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={6} w="full">
                             <GridItem>
                                 <FormControl isInvalid={!!formErrors.password}>
@@ -385,6 +429,64 @@ const Register = () => {
                                         </InputRightElement>
                                     </InputGroup>
                                     <FormErrorMessage>{formErrors.confirmPassword}</FormErrorMessage>
+                                </FormControl>
+                            </GridItem>
+                            <GridItem>
+                                <FormControl isInvalid={!!formErrors.age}>
+                                    <Input
+                                    id="age"
+                                    name="age"
+                                    type="number"
+                                    value={formData.age}
+                                    onChange={handleChange}
+                                    placeholder="Edad"
+                                    variant="unstyled"
+                                    p={4}
+                                    bg="rgba(255, 255, 255, 0.05)"
+                                    border="none"
+                                    borderBottom="2px solid"
+                                    borderColor="rgba(255, 255, 255, 0.2)"
+                                    borderRadius="4px 4px 0 0"
+                                    color="white"
+                                    _placeholder={{ color: 'gray.500' }}
+                                    _hover={{ borderColor: "rgba(76, 175, 80, 0.5)" }}
+                                    _focus={{
+                                        borderColor: "#4CAF50",
+                                        bg: "rgba(255, 255, 255, 0.07)"
+                                    }}
+                                    fontSize="md"
+                                    h="56px"
+                                    />
+                                    <FormErrorMessage>{formErrors.age}</FormErrorMessage>
+                                </FormControl>
+                            </GridItem>
+                            <GridItem>
+                                <FormControl isInvalid={!!formErrors.esp32Serial}>
+                                    <Input
+                                    id="esp32Serial"
+                                    name="esp32Serial"
+                                    type="text"
+                                    value={formData.esp32Serial}
+                                    onChange={handleChange}
+                                    placeholder="Numero de serie"
+                                    variant="unstyled"
+                                    p={4}
+                                    bg="rgba(255, 255, 255, 0.05)"
+                                    border="none"
+                                    borderBottom="2px solid"
+                                    borderColor="rgba(255, 255, 255, 0.2)"
+                                    borderRadius="4px 4px 0 0"
+                                    color="white"
+                                    _placeholder={{ color: 'gray.500' }}
+                                    _hover={{ borderColor: "rgba(76, 175, 80, 0.5)" }}
+                                    _focus={{
+                                        borderColor: "#4CAF50",
+                                        bg: "rgba(255, 255, 255, 0.07)"
+                                    }}
+                                    fontSize="md"
+                                    h="56px"
+                                    />
+                                    <FormErrorMessage>{formErrors.esp32Serial}</FormErrorMessage>
                                 </FormControl>
                             </GridItem>
                         </Grid>

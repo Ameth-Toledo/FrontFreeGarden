@@ -43,12 +43,11 @@ import { useAuth } from '../contexts/AuthContext';
 
 const UserProfile = () => {
     const { user } = useAuth();
-    console.log(user);
     const toast = useToast();
     const [formData, setFormData] = useState({
         name: user?.name || '',
         email: user?.email || '',
-        phone: '',
+        activationCode: '',
         currentPassword: '',
         newPassword: '',
         confirmPassword: '',
@@ -201,131 +200,6 @@ const UserProfile = () => {
                 </CardBody>
             </Card>
         </Stack>
-    );
-};
-
-const NotificationSettings = () => {
-    const [email, setEmail] = useState(true);
-    const [sms, setSms] = useState(false);
-    const [pushNotif, setPushNotif] = useState(true);
-    const toast = useToast();
-
-    const handleSave = () => {
-        toast({
-            title: 'Configuración guardada',
-            description: 'Tus preferencias de notificación han sido actualizadas.',
-            status: 'success',
-            duration: 3000,
-            isClosable: true,
-        });
-    };
-
-    return (
-        <Card>
-            <CardBody>
-                <Heading as="h3" size="md" mb={4}>
-                    Preferencias de Notificación
-                </Heading>
-
-                <Stack spacing={4}>
-                    <FormControl display="flex" alignItems="center">
-                        <FormLabel htmlFor="email-alerts" mb="0">
-                            Notificaciones por correo
-                        </FormLabel>
-                        <Switch
-                            id="email-alerts"
-                            colorScheme="brand"
-                            isChecked={email}
-                            onChange={() => setEmail(!email)}
-                        />
-                    </FormControl>
-
-                    <FormControl display="flex" alignItems="center">
-                        <FormLabel htmlFor="sms-alerts" mb="0">
-                            Notificaciones por SMS
-                        </FormLabel>
-                        <Switch
-                            id="sms-alerts"
-                            colorScheme="brand"
-                            isChecked={sms}
-                            onChange={() => setSms(!sms)}
-                        />
-                    </FormControl>
-
-                    <FormControl display="flex" alignItems="center">
-                        <FormLabel htmlFor="push-alerts" mb="0">
-                            Notificaciones push
-                        </FormLabel>
-                        <Switch
-                            id="push-alerts"
-                            colorScheme="brand"
-                            isChecked={pushNotif}
-                            onChange={() => setPushNotif(!pushNotif)}
-                        />
-                    </FormControl>
-
-                    <Divider my={2} />
-
-                    <FormControl>
-                        <FormLabel>Tipos de alertas</FormLabel>
-                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-                            <Box>
-                                <FormControl display="flex" alignItems="center">
-                                    <FormLabel htmlFor="humidity-alerts" mb="0" fontSize="sm">
-                                        Humedad baja/alta
-                                    </FormLabel>
-                                    <Switch id="humidity-alerts" colorScheme="brand" defaultChecked />
-                                </FormControl>
-                            </Box>
-
-                            <Box>
-                                <FormControl display="flex" alignItems="center">
-                                    <FormLabel htmlFor="temp-alerts" mb="0" fontSize="sm">
-                                        Temperatura extrema
-                                    </FormLabel>
-                                    <Switch id="temp-alerts" colorScheme="brand" defaultChecked />
-                                </FormControl>
-                            </Box>
-
-                            <Box>
-                                <FormControl display="flex" alignItems="center">
-                                    <FormLabel htmlFor="water-alerts" mb="0" fontSize="sm">
-                                        Nivel de agua bajo
-                                    </FormLabel>
-                                    <Switch id="water-alerts" colorScheme="brand" defaultChecked />
-                                </FormControl>
-                            </Box>
-
-                            <Box>
-                                <FormControl display="flex" alignItems="center">
-                                    <FormLabel htmlFor="battery-alerts" mb="0" fontSize="sm">
-                                        Batería baja
-                                    </FormLabel>
-                                    <Switch id="battery-alerts" colorScheme="brand" defaultChecked />
-                                </FormControl>
-                            </Box>
-                        </SimpleGrid>
-                    </FormControl>
-
-                    <FormControl>
-                        <FormLabel>Frecuencia de reportes</FormLabel>
-                        <Select defaultValue="daily">
-                            <option value="hourly">Cada hora</option>
-                            <option value="daily">Diario</option>
-                            <option value="weekly">Semanal</option>
-                            <option value="monthly">Mensual</option>
-                        </Select>
-                        <FormHelperText>
-                            Recibirás reportes de estado del sistema con esta frecuencia
-                        </FormHelperText>
-                    </FormControl>
-
-                    <Button colorScheme="brand" onClick={handleSave}>
-                        Guardar Preferencias
-                    </Button>
-                </Stack>
-            </CardBody>
-        </Card>
     );
 }; 
 
@@ -513,16 +387,12 @@ const Settings = () => {
             <Tabs colorScheme="brand" isLazy>
                 <TabList>
                     <Tab><HStack><Icon as={FiUser} /><Text>Perfil</Text></HStack></Tab>
-                    <Tab><HStack><Icon as={FiBell} /><Text>Notificaciones</Text></HStack></Tab>
                     <Tab><HStack><Icon as={FiSettings} /><Text>Sistema</Text></HStack></Tab>
                 </TabList>
 
                 <TabPanels>
                     <TabPanel>
                         <UserProfile />
-                    </TabPanel>
-                    <TabPanel>
-                        <NotificationSettings />
                     </TabPanel>
                     <TabPanel>
                         <SystemSettings />
